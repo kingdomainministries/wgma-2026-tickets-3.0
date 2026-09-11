@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: wgma-2026-tickets
+    runtime: node
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "3000"
+    disk:
+      - name: wgma-tickets
+        mountPath: /mnt/wgma-tickets
+        sizeGB: 1
