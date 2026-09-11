@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ticket confirmed · WGMA 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Jost:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#150720;--gold:#d4a534;--gold-lift:#f0d67f;--gold-pale:#f6e9c4;--paper:#f7f3ea;--line:rgba(212,165,52,.38)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  min-height:100vh;display:grid;place-items:center;padding:24px;
+  font-family:'Jost',sans-serif;font-weight:300;color:var(--paper);
+  background:
+    radial-gradient(60% 45% at 50% 15%, rgba(122,58,168,.5), transparent 70%),
+    linear-gradient(180deg,#200c31,#150720);
+}
+.card{
+  max-width:520px;width:100%;text-align:center;
+  border:1px solid var(--gold);background:rgba(61,26,86,.5);padding:48px 30px;
+}
+img{width:120px;margin:0 auto 24px;display:block}
+.kicker{font-family:'Cormorant Garamond',serif;letter-spacing:.3em;font-size:.85rem;color:var(--gold-pale);margin-bottom:12px}
+h1{font-family:'Cinzel',serif;font-weight:500;font-size:1.5rem;color:var(--gold-lift);letter-spacing:.05em;line-height:1.3}
+.rule{display:flex;align-items:center;gap:12px;margin:26px auto;max-width:220px}
+.rule::before,.rule::after{content:"";height:1px;flex:1;background:linear-gradient(90deg,transparent,var(--gold))}
+.rule::after{background:linear-gradient(90deg,var(--gold),transparent)}
+.rule i{width:6px;height:6px;background:var(--gold);transform:rotate(45deg)}
+p{font-family:'Cormorant Garamond',serif;font-size:1.15rem;line-height:1.7;color:#e7dcf0}
+.ref{margin-top:22px;padding:16px;border:1px solid var(--line);font-family:'Jost',sans-serif;letter-spacing:.14em;color:var(--gold-lift)}
+.meta{margin-top:26px;font-family:'Jost',sans-serif;font-size:.92rem;color:#c9b6d8;line-height:1.9}
+a{display:inline-block;margin-top:28px;padding:13px 30px;border:1px solid var(--gold);color:var(--gold-lift);text-decoration:none;font-size:.9rem;letter-spacing:.16em}
+a:hover{background:var(--gold);color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="card">
+  <img src="img/wga-logo.png" alt="Western Gospel Music Awards">
+  <p class="kicker">Payment received</p>
+  <h1>Your ticket is on its way</h1>
+  <div class="rule"><i></i></div>
+  <p>Check your inbox in the next few minutes. Your ticket carries a QR code — show it on your phone at the door.</p>
+  <p class="ref" id="ref"></p>
+  <div class="meta">
+    Sunday, November 22, 2026 · 1:00 PM<br>
+    West Jamaica Conference Centre, Mt Salem
+  </div>
+  <p style="font-size:1rem;margin-top:22px;color:#c9b6d8">Nothing in your inbox after ten minutes? Check spam, then WhatsApp 876 816 2565.</p>
+  <a href="/">Back to the event</a>
+</div>
+<script>
+  const ref = new URLSearchParams(location.search).get('ref');
+  document.getElementById('ref').textContent = ref ? 'Reference ' + ref : '';
+</script>
+</body>
+</html>

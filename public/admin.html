@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Orders · WGMA 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500&family=Cormorant+Garamond:wght@600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#150720;--gold:#d4a534;--gold-lift:#f0d67f;--gold-pale:#f6e9c4;--paper:#f7f3ea;--line:rgba(212,165,52,.34)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:'Jost',sans-serif;font-weight:300;color:var(--paper);min-height:100vh;
+  background:linear-gradient(180deg,#200c31,#150720);padding:22px 16px 60px;
+}
+.wrap{max-width:760px;margin:0 auto}
+h1{font-family:'Cinzel',serif;font-weight:500;font-size:1.15rem;letter-spacing:.08em;color:var(--gold-lift);text-align:center}
+.sub{text-align:center;font-size:.82rem;color:#c9b6d8;margin-top:6px;margin-bottom:26px}
+
+.gate{border:1px solid var(--gold);background:rgba(61,26,86,.5);padding:32px 24px;max-width:400px;margin:60px auto}
+label{display:block;font-size:.74rem;letter-spacing:.2em;color:var(--gold);margin-bottom:8px}
+input{width:100%;padding:12px 14px;background:rgba(0,0,0,.35);border:1px solid var(--line);color:#fff;font-family:'Jost',sans-serif;font-size:1rem}
+input:focus{outline:2px solid var(--gold);outline-offset:1px}
+button{font-family:'Jost',sans-serif;cursor:pointer}
+.main-btn{width:100%;margin-top:16px;padding:13px;background:var(--gold);border:0;color:var(--ink);font-size:.9rem;letter-spacing:.16em;font-weight:500}
+.main-btn:hover{background:var(--gold-lift)}
+
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:22px}
+.stat{border:1px solid var(--line);background:rgba(61,26,86,.45);padding:16px 14px;text-align:center}
+.stat span{display:block;font-size:.68rem;letter-spacing:.18em;color:var(--gold);margin-bottom:8px}
+.stat strong{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:600;color:#fff}
+
+.tabs{display:flex;border:1px solid var(--line);margin-bottom:20px}
+.tabs button{flex:1;background:transparent;border:0;color:var(--gold-pale);padding:11px;font-size:.84rem;letter-spacing:.14em}
+.tabs button+button{border-left:1px solid var(--line)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:var(--ink);font-weight:500}
+
+.order{border:1px solid var(--line);background:rgba(61,26,86,.4);padding:18px;margin-bottom:10px}
+.order.paid{border-color:rgba(212,165,52,.7)}
+.order-top{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.order-ref{color:var(--gold-lift);letter-spacing:.1em;font-size:.95rem}
+.tag{font-size:.68rem;letter-spacing:.16em;padding:4px 10px;border:1px solid var(--line);color:#c9b6d8;white-space:nowrap}
+.tag.paid{color:var(--ink);background:var(--gold);border-color:var(--gold)}
+.order-body{margin-top:10px;font-size:.9rem;color:#e7dcf0;line-height:1.75}
+.order-body em{font-style:normal;color:#c9b6d8}
+.acts{display:flex;gap:8px;margin-top:14px}
+.acts button{flex:1;padding:11px;font-size:.8rem;letter-spacing:.12em;background:transparent;border:1px solid var(--gold);color:var(--gold-lift)}
+.acts button:hover{background:var(--gold);color:var(--ink)}
+.acts button.ghost{border-color:var(--line);color:#c9b6d8}
+.acts button.ghost:hover{background:rgba(255,255,255,.08);color:#fff}
+.acts button:disabled{opacity:.45;cursor:default}
+
+.empty{text-align:center;padding:46px 20px;color:#c9b6d8;font-family:'Cormorant Garamond',serif;font-size:1.15rem}
+.msg{text-align:center;margin:16px 0;font-size:.9rem;min-height:1.3em}
+.msg.error{color:#ff9d9d}
+.msg.ok{color:var(--gold-lift)}
+
+.door-result{border:1px solid var(--line);padding:26px;text-align:center;margin-top:18px}
+.door-result.yes{border-color:#6ddf9a}
+.door-result.no{border-color:#ff9d9d}
+.door-result h2{font-family:'Cinzel',serif;font-weight:500;font-size:1.3rem;margin-bottom:10px}
+.door-result.yes h2{color:#6ddf9a}
+.door-result.no h2{color:#ff9d9d}
+.door-result p{font-size:.95rem;color:#e7dcf0;line-height:1.7}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="gate" id="gate">
+    <h1>WGMA orders</h1>
+    <p class="sub">Enter your admin key</p>
+    <label for="key">Admin key</label>
+    <input id="key" type="password" autocomplete="current-password">
+    <button class="main-btn" id="enter">Open orders</button>
+    <p class="msg" id="gateMsg"></p>
+  </div>
+
+  <div id="app" hidden>
+    <h1>WGMA orders</h1>
+    <p class="sub">Mark Lynk payments received and the ticket sends itself</p>
+
+    <div class="stats" id="stats"></div>
+
+    <div class="tabs" role="tablist">
+      <button role="tab" data-view="pending" aria-selected="true">Waiting on payment</button>
+      <button role="tab" data-view="paid" aria-selected="false">Paid</button>
+      <button role="tab" data-view="door" aria-selected="false">Door</button>
+    </div>
+
+    <p class="msg" id="msg"></p>
+    <div id="list"></div>
+
+    <div id="door" hidden>
+      <label for="doorRef">Ticket reference</label>
+      <input id="doorRef" type="text" placeholder="WGMA-XXXXXX" autocapitalize="characters">
+      <button class="main-btn" id="doorCheck">Check ticket</button>
+      <div id="doorResult"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let KEY = '';
+let VIEW = 'pending';
+let DATA = { orders: [], summary: {} };
+
+const $ = id => document.getElementById(id);
+const api = (url, opts = {}) => fetch(url, {
+  ...opts,
+  headers: { 'Content-Type': 'application/json', 'x-admin-key': KEY, ...(opts.headers || {}) }
+});
+const money = (n, cur) => (cur === 'JMD' ? '$' : 'US$') + Number(n).toLocaleString('en-US');
+
+$('enter').addEventListener('click', unlock);
+$('key').addEventListener('keydown', e => { if (e.key === 'Enter') unlock(); });
+
+async function unlock() {
+  KEY = $('key').value.trim();
+  const res = await api('/api/admin/orders');
+  if (!res.ok) { $('gateMsg').className = 'msg error'; $('gateMsg').textContent = 'That key did not work.'; return; }
+  DATA = await res.json();
+  $('gate').hidden = true;
+  $('app').hidden = false;
+  render();
+}
+
+async function refresh() {
+  const res = await api('/api/admin/orders');
+  if (res.ok) { DATA = await res.json(); render(); }
+}
+
+document.querySelectorAll('.tabs button').forEach(b => {
+  b.addEventListener('click', () => {
+    VIEW = b.dataset.view;
+    document.querySelectorAll('.tabs button').forEach(x => x.setAttribute('aria-selected', String(x === b)));
+    $('msg').textContent = '';
+    render();
+  });
+});
+
+function render() {
+  const s = DATA.summary || {};
+  $('stats').innerHTML = `
+    <div class="stat"><span>TICKETS SOLD</span><strong>${s.ticketsSold || 0}</strong></div>
+    <div class="stat"><span>WAITING</span><strong>${s.pending || 0}</strong></div>
+    <div class="stat"><span>TAKINGS JMD</span><strong>${money(s.takingsJMD || 0, 'JMD')}</strong></div>
+    <div class="stat"><span>TAKINGS USD</span><strong>${money(s.takingsUSD || 0, 'USD')}</strong></div>`;
+
+  $('door').hidden = VIEW !== 'door';
+  $('list').hidden = VIEW === 'door';
+  if (VIEW === 'door') return;
+
+  const rows = DATA.orders.filter(o => o.status === VIEW);
+  if (!rows.length) {
+    $('list').innerHTML = `<p class="empty">${VIEW === 'pending' ? 'Nothing waiting on payment.' : 'No paid orders yet.'}</p>`;
+    return;
+  }
+
+  $('list').innerHTML = rows.map(o => `
+    <div class="order ${o.status}">
+      <div class="order-top">
+        <span class="order-ref">${o.reference}</span>
+        <span class="tag ${o.status}">${o.status === 'paid' ? 'PAID' : (o.method === 'lynk' ? 'LYNK' : 'CARD')}</span>
+      </div>
+      <div class="order-body">
+        ${o.name}<br>
+        <em>${o.email}</em>${o.phone ? `<br><em>${o.phone}</em>` : ''}<br>
+        ${o.quantity} ticket(s) &middot; ${money(o.total, o.currency)} ${o.currency}
+        ${o.usedAt ? '<br><em>Admitted at the door</em>' : ''}
+      </div>
+      ${o.status === 'pending' ? `
+      <div class="acts">
+        <button data-confirm="${o.reference}">Payment received</button>
+        <button class="ghost" data-cancel="${o.reference}">Cancel</button>
+      </div>` : ''}
+    </div>`).join('');
+
+  $('list').querySelectorAll('[data-confirm]').forEach(b =>
+    b.addEventListener('click', () => confirmPaid(b.dataset.confirm, b)));
+  $('list').querySelectorAll('[data-cancel]').forEach(b =>
+    b.addEventListener('click', () => cancel(b.dataset.cancel, b)));
+}
+
+async function confirmPaid(reference, btn) {
+  const o = DATA.orders.find(x => x.reference === reference);
+  if (!confirm(`Confirm ${money(o.total, o.currency)} received from ${o.name}?\n\nThis sends their ticket straight away.`)) return;
+
+  btn.disabled = true;
+  btn.textContent = 'Sending ticket…';
+  const res = await api('/api/admin/confirm', { method: 'POST', body: JSON.stringify({ reference }) });
+  const data = await res.json();
+
+  $('msg').className = res.ok ? 'msg ok' : 'msg error';
+  $('msg').textContent = res.ok ? `Ticket sent to ${o.email}` : (data.error || 'That did not work');
+  refresh();
+}
+
+async function cancel(reference, btn) {
+  if (!confirm(`Cancel ${reference}? The seat is released.`)) return;
+  btn.disabled = true;
+  await api('/api/admin/cancel', { method: 'POST', body: JSON.stringify({ reference }) });
+  $('msg').className = 'msg ok';
+  $('msg').textContent = `${reference} cancelled`;
+  refresh();
+}
+
+$('doorCheck').addEventListener('click', checkDoor);
+$('doorRef').addEventListener('keydown', e => { if (e.key === 'Enter') checkDoor(); });
+
+async function checkDoor() {
+  const ref = $('doorRef').value.trim().toUpperCase();
+  if (!ref) return;
+  const res = await api('/api/admin/check/' + encodeURIComponent(ref));
+  const d = await res.json();
+  const box = $('doorResult');
+
+  if (!d.valid) {
+    box.className = 'door-result no';
+    box.innerHTML = `<h2>Do not admit</h2><p>${d.status === 'pending' ? 'This booking has not been paid.' : 'No paid ticket with that reference.'}</p>`;
+    return;
+  }
+
+  box.className = 'door-result yes';
+  box.innerHTML = `
+    <h2>Admit</h2>
+    <p>${d.name}<br>${d.quantity} ticket(s)</p>
+    ${d.usedAt ? `<p style="color:#ffcf8a;margin-top:12px">Already scanned at ${new Date(d.usedAt).toLocaleTimeString()}</p>` : ''}
+    <button class="main-btn" id="admit">Mark as admitted</button>`;
+
+  const admit = document.getElementById('admit');
+  if (admit) admit.addEventListener('click', async () => {
+    admit.disabled = true;
+    await api('/api/admin/admit/' + encodeURIComponent(ref), { method: 'POST' });
+    admit.textContent = 'Admitted';
+    $('doorRef').value = '';
+  });
+}
+</script>
+</body>
+</html>

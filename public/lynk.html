@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Finish your booking · WGMA 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500&family=Cormorant+Garamond:wght@400;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#150720;--gold:#d4a534;--gold-lift:#f0d67f;--gold-pale:#f6e9c4;--paper:#f7f3ea;--line:rgba(212,165,52,.38)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  min-height:100vh;display:grid;place-items:center;padding:24px;
+  font-family:'Jost',sans-serif;font-weight:300;color:var(--paper);
+  background:radial-gradient(60% 45% at 50% 12%,rgba(122,58,168,.5),transparent 70%),linear-gradient(180deg,#200c31,#150720);
+}
+.card{max-width:520px;width:100%;border:1px solid var(--gold);background:rgba(61,26,86,.5);padding:44px 30px;text-align:center}
+img{width:110px;margin:0 auto 22px;display:block}
+.kicker{font-family:'Cormorant Garamond',serif;letter-spacing:.3em;font-size:.82rem;color:var(--gold-pale);margin-bottom:12px}
+h1{font-family:'Cinzel',serif;font-weight:500;font-size:1.4rem;color:var(--gold-lift);letter-spacing:.05em;line-height:1.35}
+.rule{display:flex;align-items:center;gap:12px;margin:24px auto;max-width:220px}
+.rule::before,.rule::after{content:"";height:1px;flex:1;background:linear-gradient(90deg,transparent,var(--gold))}
+.rule::after{background:linear-gradient(90deg,var(--gold),transparent)}
+.rule i{width:6px;height:6px;background:var(--gold);transform:rotate(45deg)}
+p.lede{font-family:'Cormorant Garamond',serif;font-size:1.15rem;line-height:1.7;color:#e7dcf0}
+.steps{text-align:left;margin:28px 0 0;counter-reset:s}
+.steps li{
+  list-style:none;counter-increment:s;position:relative;
+  padding:14px 0 14px 44px;border-top:1px solid var(--line);
+  font-size:.98rem;color:#e7dcf0;
+}
+.steps li::before{
+  content:counter(s);position:absolute;left:0;top:13px;
+  width:26px;height:26px;border:1px solid var(--gold);color:var(--gold-lift);
+  display:grid;place-items:center;font-size:.8rem;
+}
+.steps b{color:#fff;font-weight:500}
+.ref{
+  margin-top:26px;padding:18px;border:1px solid var(--gold);
+  background:rgba(0,0,0,.25);
+}
+.ref span{display:block;font-size:.74rem;letter-spacing:.22em;color:var(--gold);margin-bottom:8px}
+.ref strong{font-size:1.5rem;letter-spacing:.14em;color:var(--gold-lift);font-weight:400}
+button.copy{
+  margin-top:14px;background:transparent;border:1px solid var(--line);color:var(--gold-pale);
+  padding:9px 20px;font-family:'Jost',sans-serif;font-size:.82rem;letter-spacing:.14em;cursor:pointer;
+}
+button.copy:hover{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+.foot{margin-top:26px;font-size:.9rem;color:#c9b6d8;line-height:1.8}
+a.back{display:inline-block;margin-top:24px;padding:12px 28px;border:1px solid var(--gold);color:var(--gold-lift);text-decoration:none;font-size:.88rem;letter-spacing:.16em}
+a.back:hover{background:var(--gold);color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="card">
+  <img src="img/wga-logo.png" alt="Western Gospel Music Awards">
+  <p class="kicker">Seat held</p>
+  <h1>One step left</h1>
+  <div class="rule"><i></i></div>
+  <p class="lede">Send the payment on Lynk and your ticket follows by email once we confirm it. We have also emailed you these instructions.</p>
+
+  <div class="ref">
+    <span>YOUR REFERENCE</span>
+    <strong id="ref">—</strong>
+    <br><button class="copy" id="copy">Copy reference</button>
+  </div>
+
+  <ol class="steps">
+    <li>Open Lynk and send to <b id="handle">our Lynk account</b></li>
+    <li>Put your reference <b id="ref2">—</b> in the note</li>
+    <li>We confirm it, usually the same day</li>
+    <li>Your ticket with its QR code arrives by email</li>
+  </ol>
+
+  <p class="foot">
+    The reference is how we match your payment to you.<br>
+    Held seats are released after 48 hours.<br>
+    Stuck? WhatsApp 876 816 2565.
+  </p>
+
+  <a class="back" href="/">Back to the event</a>
+</div>
+<script>
+  // Put your Lynk handle here so it shows on this page too.
+  const LYNK_HANDLE = '@yourlynkhandle';
+
+  const ref = (new URLSearchParams(location.search).get('ref') || '').toUpperCase();
+  document.getElementById('ref').textContent = ref || '—';
+  document.getElementById('ref2').textContent = ref || '—';
+  document.getElementById('handle').textContent = LYNK_HANDLE;
+
+  document.getElementById('copy').addEventListener('click', async e => {
+    try {
+      await navigator.clipboard.writeText(ref);
+      e.target.textContent = 'Copied';
+      setTimeout(() => e.target.textContent = 'Copy reference', 1800);
+    } catch { e.target.textContent = 'Copy it by hand'; }
+  });
+</script>
+</body>
+</html>
